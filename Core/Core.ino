@@ -1,5 +1,3 @@
-#include <0.h>
-
 int mem[4096];
 int addr;
 bool s; //start read op_mem
@@ -69,6 +67,7 @@ void loop() {
   if(s){
     switch(command){
       case 0x00:
+          addr++;
           break;
       case 0x01: //add
           add();

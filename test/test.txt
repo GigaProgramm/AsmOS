@@ -1,0 +1,33 @@
+mov
+r
+40
+r
+66
+r
+mova
+r
+41
+r
+40
+r
+add
+r
+40
+r
+41
+r
+cout
+r
+40
+s
+
+
+///////////
+Вывод:
+Processor is start
+
+132
+Output:
+Processor is start
+
+132

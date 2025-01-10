@@ -20,18 +20,51 @@ class TextIDE(tk.Tk):
         self.save_button = tk.Button(self.toolbar, text="Save", command=self.save_file)
         self.save_button.pack(fill="x", pady=10)
 
-        self.interpret_button = tk.Button(self.toolbar, text="Interpret", command=self.interpret_code)
+        self.interpret_button = tk.Button(self.toolbar, text="Build BIN", command=self.interpret_code)
+        self.interpret_button.pack(fill="x", pady=10)
+        
+        self.interpret_button = tk.Button(self.toolbar, text="Build ASM", command=self.interpret_code)
         self.interpret_button.pack(fill="x", pady=10)
 
         self.quit_button = tk.Button(self.toolbar, text="Quit", command=self.quit_app)
         self.quit_button.pack(fill="x", pady=10)
 
-        self.text_area = tk.Text(self, font=("Consolas", 12))
+        self.text_area = tk.Text(self, font=("Consolas", 16))
         self.text_area.pack(fill="both", side=tk.RIGHT, expand=True)
 
-        self.line_number_area = tk.Text(self, width=5, height=400, font=("Consolas", 12))
+        self.line_number_area = tk.Text(self, width=5, height=400, font=("Consolas", 16))
         self.line_number_area.pack(side=tk.LEFT, fill="y")
+        self.text_area.tag_config('keyword', foreground='#f250e7')  # purple
+        self.text_area.tag_config('comment', foreground='#8d9ba6')  # dark green
+
+
+        self.keywords = ['null', 'mov','add', 'cout', 'mova', 'inc']
+        self.comments = ['; ']
+
+        self.text_area.bind("<KeyRelease>", self.highlight_syntax_realtime)  
         self.update_line_numbers()
+    def highlight_syntax_realtime(self, event):
+        self.text_area.tag_remove('keyword', '1.0', 'end')
+        self.text_area.tag_remove('string', '1.0', 'end')
+
+        text = self.text_area.get('1.0', 'end-1c')
+        lines = text.split('\n')
+
+        for i, line in enumerate(lines, 1):
+            words = line.split()
+            for j, word in enumerate(words):
+                if word in self.keywords:
+                    start = f'{i}.{line.index(word)}'
+                    end = f'{i}.{line.index(word) + len(word)}'
+                    self.text_area.tag_add('keyword', start, end)
+
+
+            for comment in self.comments:
+                if comment in line:
+                    start = f'{i}.{line.index(comment)}'
+                    end = f'{i}.end'
+                    self.text_area.tag_add('comment', start, end)
+
 
     def update_line_numbers(self):
         self.line_number_area.delete("1.0", "end")
@@ -40,7 +73,7 @@ class TextIDE(tk.Tk):
         self.after(100, self.update_line_numbers)
 
     def open_file(self):
-        file_path = filedialog.askopenfilename(filetypes=[('Assembly', '*.asm')])
+        file_path = filedialog.askopenfilename(filetypes=[('Assembly', '*.asm'), ('Text file', '.txt')])
         if file_path:
             with open(file_path, 'r') as file:
                 code = file.read()

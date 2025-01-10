@@ -1,0 +1,12 @@
+mov 100, 100
+mov 101, 32
+mov 102, 55
+sub 100, 101 
+cout 100 
+sub 100, 102
+cout 100 
+end
+
+/sub - subtraction, 1nd operand - address memory 1st number, 2nd operand - address memory 2nd number
+
+

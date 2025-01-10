@@ -105,19 +105,35 @@ class TextIDE(tk.Tk):
                 if len(parts) == 3:  # Проверяем, что есть два аргумента
                     args = parts[1].split(',')
                     if len(args) == 2:
-                        commands.append(f"0x01 {args[0].strip()} {args[1].strip()}")  # Команда для add
+                        commands.append(f"01 {args[0].strip()} {args[1].strip()}")  # Команда для add
             elif command == "sub":
                 if len(parts) == 3:
                     args = parts[1].split(',')
                     if len(args) == 2:
-                        commands.append(f"0x02 {args[0].strip()} {args[1].strip()}")  # Команда для sub
+                        commands.append(f"02 {args[0].strip()} {args[1].strip()}")  # Команда для sub
             elif command == "inc":
                 if len(parts) == 2:
-                    commands.append(f"0x03 {parts[1].strip()}")  # Команда для inc
+                    commands.append(f"03 {parts[1].strip()}")  # Команда для inc
             elif command == "dec":
                 if len(parts) == 2:
-                    commands.append(f"0x04 {parts[1].strip()}")  # Команда для dec
-
+                    commands.append(f"04 {parts[1].strip()}")  # Команда для dec
+                            
+            elif command == "mov":
+                if len(parts) == 2:
+                    commands.append(f"05 {parts[1].strip()}")  # Команда для mov
+            elif command == "mova":
+                if len(parts) == 2:
+                    commands.append(f"06 {parts[1].strip()}")  # Команда для mova
+            elif command == "jmp":
+                if len(parts) == 2:
+                    commands.append(f"07 {parts[1].strip()}")  # Команда для jmp
+            elif command == "jmpa":
+                if len(parts) == 2:
+                    commands.append(f"08 {parts[1].strip()}")  # Команда для jmpa
+            elif command == "cout":
+                if len(parts) == 2:
+                    commands.append(f"09 {parts[1].strip()}")  # Команда для cout
+        
         # Сохранение интерпретированных команд в файл
         output_file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[('Text Files', '*.txt')])
         if output_file_path:

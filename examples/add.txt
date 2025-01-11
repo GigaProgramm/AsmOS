@@ -1,0 +1,7 @@
+mov 100, 200
+mov 101, 250
+add 100, 101 
+cout 100 
+end
+
+/add - summarizes, 1st operand - address memory 1st number, 2nd operand - address memory 2nd number

@@ -1,0 +1,6 @@
+mov 100, 200
+dec 100
+cout 100
+end
+
+/dec - decrease, reduces the number by one 

@@ -1,0 +1,6 @@
+mov 100, 299
+inc 100
+cout 100
+end
+
+/inc - increase, increases the number by one 

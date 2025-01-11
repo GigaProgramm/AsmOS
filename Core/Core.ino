@@ -5,10 +5,10 @@ int mem[4096]; // Память программы (массив из 4096 эле
 int addr; // Адрес текущей ячейки памяти
 bool s; // Флаг, указывающий на начало чтения
 byte command; // Переменная для команды
-String com; // Переменная для хранения прочитанной строки из файла
+String str; // Переменная для хранения прочитанной строки из файла
 boolean FileOpen, FileClose, FileReady; // Флаги открытия и закрытия файла
-String file = "/test.txt"; // Имя файла для чтения с SD карты
-
+String file = "/main.txt"; // Имя файла для чтения с SD карты
+#include <string.h>
 #include <SPI.h>
 #include <SD.h> // Подключение библиотек для работы с SD картой
 
@@ -63,6 +63,17 @@ void loop() {
       addr = 0; // Возврат к началу памяти, если адрес превышает размер массива
     }
   }
+}
+String trim_space(String str) {
+  String result = "";
+  
+  for (int i = 0; i < str.length(); i++) {
+    if (str[i] != ' ') {
+      result += str[i];
+    }
+  }
+  
+  return result;
 }
 
 // Функция выполнения команды "add" (сложение)
@@ -119,6 +130,7 @@ void cout() {
 
 // Функция для загрузки программы с SD карты
 void writeProg() {
+  int operand_1, operand_2;
   File dataFile; // Переменная для работы с файлом на SD карте
 
   // Если файл не открыт, то пытаемся открыть его
@@ -134,56 +146,79 @@ void writeProg() {
       FileReady = 1;
     }
   }
-
+  
   // Чтение строк из файла
-  while (dataFile.available()) {
-    com = dataFile.readStringUntil('\n'); // Чтение строки до символа новой строки
-
-    if (!s) { // Если процессор еще не запущен
-      if (com == "r") {
-        addr++; // Если команда "r", увеличиваем адрес
-        Serial.print("r ");
-        Serial.println(addr);
-      } else if (com == "s") {
+    while (dataFile.available()) {
+      if (!s) { // Если процессор еще не запущен
+      str = dataFile.readStringUntil('\n'); // Чтение строки до символа новой строки
+      String com = str.substring(0, str.indexOf(' '));
+      if(com == "end"){
         Serial.println("Processor is start"); // Если команда "s", начинаем выполнение
         addr = 0;
         s = true;
+        dataFile.close();
+      }
+      String operands = str.substring(str.indexOf(' '));
+      operands = trim_space(operands);
+      if(operands.indexOf(',') != -1){
+        operand_1 = (operands.substring(0, operands.indexOf(','))).toInt();
+        operand_2 = (operands.substring(operands.indexOf(',') + 1)).toInt();
       } else {
+        operand_1 = operands.toInt();
+      }
         // Распознаем команды и заносим их в память
         if (com == "add") {
           mem[addr] = 1;
+          mem[addr+1] = operand_1;
+          mem[addr+2] = operand_2;
+          addr += 3;
           Serial.println("add");
         } else if (com == "sub") {
           mem[addr] = 2;
+          mem[addr+1] = operand_1;
+          mem[addr+2] = operand_2;
+          addr += 3;
           Serial.println("sub");
         } else if (com == "inc") {
           mem[addr] = 3;
+          mem[addr+1] = operand_1;
+          addr += 2;
           Serial.println("inc");
         } else if (com == "dec") {
           mem[addr] = 4;
+          mem[addr+1] = operand_1;
+          addr += 2;
           Serial.println("dec");
         } else if (com == "mov") {
           mem[addr] = 5;
+          mem[addr+1] = operand_1;
+          mem[addr+2] = operand_2;
+          addr += 3;
           Serial.println("mov");
         } else if (com == "mova") {
           mem[addr] = 6;
+          mem[addr+1] = operand_1;
+          mem[addr+2] = operand_2;
+          addr += 3;
           Serial.println("mova");
         } else if (com == "jmp") {
           mem[addr] = 7;
+          mem[addr+1] = operand_1;
+          addr += 2;
           Serial.println("jmp");
         } else if (com == "jmpa") {
           mem[addr] = 8;
+          mem[addr+1] = operand_1;
+          addr += 2;
           Serial.println("jmpa");
         } else if (com == "cout") {
           mem[addr] = 9;
+          mem[addr+1] = operand_1;
+          addr += 2;
           Serial.println("cout");
-        } else {
-          mem[addr] = com.toInt(); // Если команда не распознана, то конвертируем строку в число
-          Serial.println(mem[addr]);
         }
-      }
+      } 
     }
-  }
 
   FileClose = 1; // Файл закрыт
 

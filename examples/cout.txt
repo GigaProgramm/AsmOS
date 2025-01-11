@@ -1,0 +1,7 @@
+mov 100, 1234
+cout 100 
+end
+
+/cout - serial output of data from a memory location(for debugging only)
+
+

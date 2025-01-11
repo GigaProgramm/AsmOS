@@ -1,0 +1,10 @@
+mov 100, 1000
+mov 101, 7
+sub 100, 101
+cout 100 
+jmp 6
+end
+
+/deadinside
+/1000-7
+

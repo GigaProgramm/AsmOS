@@ -20,4 +20,4 @@ This is a draft OS for PDAs on ESP32. It is planned to be able to support custom
 - **Temp**: Temporary files.
 - **examples**: Examples.
 #### Repo map in graph
-<img src="rcache/AsmOs-map.png">
+<img src="../rcache/asm.png">

@@ -9,11 +9,12 @@ String file = "/main.txt"; // Имя файла для чтения с SD кар
 String binFile = "/main_bin.txt"; // Новый файл для записи в текстовом формате
 boolean FileOpen, FileClose, FileReady;
 String out_mem;
+bool cf, zf, sf, of; 
+int reg[4];
 void setup() {
   Serial.begin(115200); // Инициализация порта для отладки
   delay(500); // Задержка для стабилизации соединения
   Serial.println("upload"); // Сообщение о старте
-
   openFile(); // Открытие файла и загрузка команд
 }
 
@@ -273,7 +274,7 @@ void processLine(String line, File &bin) {
     bin.println("7 " + String(operand_1)); // Команда jmp
   } else if (com == "jmpa") {
     bin.println("8 " + String(operand_1)); // Команда jmpa
-  } else if (com == "cout") {
+  } else if (com == "cout") {ax, bx, cx, dx;
     bin.println("9 " + String(operand_1)); // Команда cout
   }
 }
